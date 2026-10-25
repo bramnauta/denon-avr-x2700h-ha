@@ -1,7 +1,7 @@
 {
   "exceptions": {
     "not_accepted": {
-      "message": "The receiver did not accept {value} for {entity}. This setting is probably not available for the current input signal or surround mode (for example dynamic range compression and LFE level with a stereo PCM signal)."
+      "message": "The receiver did not accept {value} for {entity}. This setting is probably not available for the current input signal or surround mode."
     }
   },
   "config": {

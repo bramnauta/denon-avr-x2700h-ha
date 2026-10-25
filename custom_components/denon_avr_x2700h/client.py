@@ -83,6 +83,9 @@ class DenonClient:
         self._pending_refresh: list[str] = []
         # Setting key -> futures waiting for the receiver to report that key.
         self._waiters: dict[str, list[asyncio.Future[str]]] = {}
+        # Raw values we set that the receiver stored but does not report
+        # because they are not in effect for the current signal (DRC, LFE).
+        self.stored: dict[str, str] = {}
         self._connected = asyncio.Event()
         self._synced = asyncio.Event()
         self._stopping = False
@@ -100,8 +103,19 @@ class DenonClient:
         return key in self.raw
 
     def get(self, key: str) -> Any:
-        """Return the decoded value for ``key`` or None."""
-        raw = self.raw.get(key)
+        """Return the decoded value for ``key`` or None.
+
+        For settings that report their effective value, a value stored on the
+        receiver but not in effect (see ``stored``) takes precedence.
+        """
+        return self._decode(key, self.stored.get(key, self.raw.get(key)))
+
+    def get_reported(self, key: str) -> Any:
+        """Return the value exactly as the receiver last reported it."""
+        return self._decode(key, self.raw.get(key))
+
+    @staticmethod
+    def _decode(key: str, raw: str | None) -> Any:
         if raw is None:
             return None
         try:
@@ -319,6 +333,13 @@ class DenonClient:
             for waiter in self._waiters.get(setting.key, ()):
                 if not waiter.done():
                     waiter.set_result(value)
+            # A stored-but-inactive value is superseded once the receiver
+            # reports it, or reports any other change (signal or menu change).
+            if setting.key in self.stored and (
+                value == self.stored[setting.key] or value != self.raw.get(setting.key)
+            ):
+                del self.stored[setting.key]
+                changed.add(setting.key)
             if self.raw.get(setting.key) != value:
                 self.raw[setting.key] = value
                 changed.add(setting.key)
@@ -400,11 +421,20 @@ class DenonClient:
         ignores the command silently; in that last case ask for the value.
         """
         command = setting.encode(value)
-        expected = setting.decode(command[len(setting.prefix) + len(setting.sep) :].strip())
+        expected_raw = command[len(setting.prefix) + len(setting.sep) :].strip()
+        expected = setting.decode(expected_raw)
         answered = await self._send_and_wait(setting.key, command, timeout)
         if not answered and setting.query:
-            await self._send_and_wait(setting.key, setting.query, timeout)
-        return self.get(setting.key) == expected
+            answered = await self._send_and_wait(setting.key, setting.query, timeout)
+        if self.get_reported(setting.key) == expected:
+            self.stored.pop(setting.key, None)
+            return True
+        if setting.reports_effective and answered:
+            # Stored by the receiver but not in effect for this input signal.
+            self.stored[setting.key] = expected_raw
+            self._notify({setting.key})
+            return True
+        return False
 
     async def _send_and_wait(self, key: str, command: str, timeout: float) -> bool:
         """Send ``command``; return True once the receiver reports ``key``."""

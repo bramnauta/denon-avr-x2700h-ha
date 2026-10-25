@@ -215,7 +215,7 @@ TEXT = {
     "en": {
         "exceptions": {
             "not_accepted": {
-                "message": "The receiver did not accept {value} for {entity}. This setting is probably not available for the current input signal or surround mode (for example dynamic range compression and LFE level with a stereo PCM signal).",
+                "message": "The receiver did not accept {value} for {entity}. This setting is probably not available for the current input signal or surround mode.",
             },
         },
         "config": {
@@ -287,7 +287,7 @@ TEXT = {
     "nl": {
         "exceptions": {
             "not_accepted": {
-                "message": "De receiver heeft {value} voor {entity} niet geaccepteerd. Deze instelling is waarschijnlijk niet beschikbaar voor het huidige ingangssignaal of de surroundmodus (bijvoorbeeld dynamische compressie en LFE-niveau bij een stereo PCM-signaal).",
+                "message": "De receiver heeft {value} voor {entity} niet geaccepteerd. Deze instelling is waarschijnlijk niet beschikbaar voor het huidige ingangssignaal of de surroundmodus.",
             },
         },
         "config": {

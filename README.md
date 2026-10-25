@@ -43,6 +43,14 @@ terugmelden, daarom zijn het knoppen en geen switches. Let op: met *Afstandsbedi
 vergrendelen* werkt de IR-afstandsbediening niet meer tot je *Afstandsbediening ontgrendelen*
 indrukt.
 
+**Dynamische compressie en LFE-niveau:** de receiver meldt via Telnet de waarde die *nu
+werkt*, niet de opgeslagen instelling. Bij een PCM-signaal (bijv. een streamer die zelf
+Dolby decodeert) meldt hij voor DRC altijd *Uit*, ook al staat er in het menu *Mid*. Kies je
+een stand in Home Assistant, dan toont de entiteit die stand met het attribuut
+`active: false` en `effective_value` (wat nu werkt). Zodra er een Dolby/DTS-signaal binnenkomt
+en de receiver de stand zelf meldt, wordt `active` weer `true`. Na een herstart van
+Home Assistant is de gekozen stand niet bekend en toont de entiteit weer de werkende waarde.
+
 Entiteiten worden pas aangemaakt zodra de receiver een waarde voor die instelling
 meldt. Instellingen die bij jouw luidsprekeropstelling of firmware niet bestaan (bijv.
 ongebruikte kanalen of Subwoofer 2) verschijnen dus niet. Sommige audio-instellingen

@@ -87,6 +87,9 @@ class Setting:
     requires: str | None = None
     # Sensor device class ("distance", "frequency").
     device_class: str | None = None
+    # The receiver reports the value in effect, not the stored setting: e.g.
+    # DRC is stored as "MID" but reported as "OFF" while the input is PCM.
+    reports_effective: bool = False
 
     def accepts(self, value: str) -> bool:
         """Return True if ``value`` is a valid response value for this setting."""
@@ -675,6 +678,7 @@ SETTINGS: tuple[Setting, ...] = (
         "PSDRC ",
         {"auto": "AUTO", "low": "LOW", "mid": "MID", "high": "HI", "off": "OFF"},
         icon="mdi:waveform",
+        reports_effective=True,  # verified: menu shows MID, Telnet says OFF (PCM)
     ),
     _number(
         "lfe_level",
@@ -684,6 +688,7 @@ SETTINGS: tuple[Setting, ...] = (
         max_value=0,
         unit="dB",
         icon="mdi:speaker",
+        reports_effective=True,  # same pattern as DRC with PCM input
     ),
     _number(
         "audio_delay",

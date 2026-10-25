@@ -24,6 +24,9 @@ STATE = {
     "PSDRC OFF": ["PSDRC OFF"],
     "PSLFE ?": ["PSLFE 00"],
     "PSLFE 05": [],
+    # A setting the receiver really refuses: answers with its kept value.
+    "DIM ?": ["DIM DIM"],
+    "DIM BRI": ["DIM DIM"],
     "SSFUN ?": ["SSFUNBD BD              ", "SSFUNMPLAY TV Streamer     ", "SSFUN END"],
     "OPSML ?": [
         "OPSML 010Stereo",
@@ -170,20 +173,41 @@ def test_set_confirmed(monkeypatch) -> None:
         assert await client.async_wait_synced(10)
         settings = client_mod.SETTINGS_BY_KEY
 
+        drc = settings["dynamic_range_compression"]
+
         # Echoed -> accepted.
         assert await client.async_set_confirmed(settings["dynamic_eq"], False, 1)
-        assert await client.async_set_confirmed(settings["dynamic_range_compression"], "off", 1)
-        # Answered with the kept value -> refused, without waiting for a timeout.
+        assert await client.async_set_confirmed(drc, "off", 1)
+
+        # Answered with another value -> refused, without waiting for a timeout.
         loop = asyncio.get_running_loop()
         start = loop.time()
-        assert not await client.async_set_confirmed(
-            settings["dynamic_range_compression"], "low", 1
-        )
+        assert not await client.async_set_confirmed(settings["dimmer"], "bright", 1)
         assert loop.time() - start < 0.5
-        # Silently ignored -> refused after asking for the value.
-        assert not await client.async_set_confirmed(settings["lfe_level"], -5, 0.3)
+        assert client.get("dimmer") == "dim"
+
+        # DRC with a PCM signal: the receiver stores LOW but keeps reporting
+        # OFF (seen on a real AVR-X2700H). Accepted, shown as stored, inactive.
+        assert await client.async_set_confirmed(drc, "low", 1)
+        assert client.get(drc.key) == "low"
+        assert client.get_reported(drc.key) == "off"
+        assert drc.key in client.stored
+        # A refresh repeating the effective value keeps the stored value ...
+        await fake.push("PSDRC OFF")
+        await asyncio.sleep(0.1)
+        assert client.get(drc.key) == "low"
+        # ... until the receiver reports it (e.g. a Dolby signal arrives).
+        await fake.push("PSDRC LOW")
+        await asyncio.sleep(0.1)
+        assert drc.key not in client.stored
+        assert client.get(drc.key) == "low"
+
+        # LFE silently ignored, then answered with the effective value on the
+        # follow-up query -> stored as well.
+        assert await client.async_set_confirmed(settings["lfe_level"], -5, 0.3)
         assert fake.received[-1] == "PSLFE ?"
-        assert client.get("lfe_level") == 0
+        assert client.get("lfe_level") == -5
+        assert client.get_reported("lfe_level") == 0
         assert not client._waiters
 
         await client.async_stop()

@@ -114,6 +114,17 @@ class DenonSettingEntity(DenonEntity):
     def _value(self) -> Any:
         return self._client.get(self._setting.key)
 
+    @property
+    def extra_state_attributes(self) -> dict[str, Any] | None:
+        """For DRC / LFE: whether the shown value is in effect right now."""
+        if not self._setting.reports_effective:
+            return None
+        key = self._setting.key
+        return {
+            "active": key not in self._client.stored,
+            "effective_value": self._client.get_reported(key),
+        }
+
     async def _async_set(self, value: Any) -> None:
         try:
             accepted = await self._client.async_set_confirmed(self._setting, value)

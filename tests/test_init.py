@@ -95,14 +95,25 @@ async def test_setup_and_control(
         {"entity_id": "switch.denon_avr_x2700h_audyssey_dynamic_eq"},
         blocking=True,
     )
-    # The receiver keeps DRC off for PCM; the user gets an error, not silence.
+    # With PCM the receiver stores DRC but keeps reporting OFF: no error, the
+    # entity shows the chosen value and says it is not in effect.
     drc = "select.denon_avr_x2700h_dynamic_range_compression"
+    await hass.services.async_call(
+        "select", "select_option", {"entity_id": drc, "option": "low"}, blocking=True
+    )
+    state = hass.states.get(drc)
+    assert state.state == "low"
+    assert state.attributes["active"] is False
+    assert state.attributes["effective_value"] == "off"
+
+    # A change the receiver really refuses gives an error, not silence.
+    dimmer = "select.denon_avr_x2700h_display_dimmer"
     with pytest.raises(HomeAssistantError) as err:
         await hass.services.async_call(
-            "select", "select_option", {"entity_id": drc, "option": "low"}, blocking=True
+            "select", "select_option", {"entity_id": dimmer, "option": "bright"}, blocking=True
         )
     assert err.value.translation_key == "not_accepted"
-    assert hass.states.get(drc).state == "off"
+    assert hass.states.get(dimmer).state == "dim"
 
     await hass.services.async_call(
         "media_player",

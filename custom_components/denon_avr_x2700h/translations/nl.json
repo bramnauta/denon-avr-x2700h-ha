@@ -1,7 +1,7 @@
 {
   "exceptions": {
     "not_accepted": {
-      "message": "De receiver heeft {value} voor {entity} niet geaccepteerd. Deze instelling is waarschijnlijk niet beschikbaar voor het huidige ingangssignaal of de surroundmodus (bijvoorbeeld dynamische compressie en LFE-niveau bij een stereo PCM-signaal)."
+      "message": "De receiver heeft {value} voor {entity} niet geaccepteerd. Deze instelling is waarschijnlijk niet beschikbaar voor het huidige ingangssignaal of de surroundmodus."
     }
   },
   "config": {
