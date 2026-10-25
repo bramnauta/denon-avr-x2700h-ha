@@ -1,0 +1,580 @@
+{
+  "exceptions": {
+    "not_accepted": {
+      "message": "De receiver heeft {value} voor {entity} niet geaccepteerd. Deze instelling is waarschijnlijk niet beschikbaar voor het huidige ingangssignaal of de surroundmodus (bijvoorbeeld dynamische compressie en LFE-niveau bij een stereo PCM-signaal)."
+    }
+  },
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Denon AVR-X2700H",
+        "description": "Vul het IP-adres van de receiver in. Netwerkbesturing moet op Altijd aan staan en er mag geen andere Telnet-client verbonden zijn.",
+        "data": {
+          "host": "Host",
+          "name": "Naam"
+        }
+      },
+      "confirm": {
+        "title": "Denon AVR-X2700H",
+        "description": "{name} ({host}) toevoegen?"
+      },
+      "reconfigure": {
+        "title": "Host wijzigen",
+        "data": {
+          "host": "Host"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Kan niet verbinden op Telnet-poort 23. Controleer het IP-adres, zet netwerkbesturing aan en zorg dat er geen andere Telnet-client verbonden is."
+    },
+    "abort": {
+      "already_configured": "Deze receiver is al geconfigureerd.",
+      "reconfigure_successful": "De receiver is opnieuw geconfigureerd.",
+      "cannot_connect": "Kan niet verbinden met de receiver."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opties",
+        "data": {
+          "zone2": "Zone 2 inschakelen",
+          "max_volume": "Volume bij 100% (dB)",
+          "volume_step": "Volumestap (dB)"
+        },
+        "data_description": {
+          "max_volume": "Bovengrens van de volumeschuif van de mediaspeler; 0 dB is een veilige standaard."
+        }
+      }
+    }
+  },
+  "services": {
+    "send_command": {
+      "name": "Commando versturen",
+      "description": "Stuur ruwe Telnet-commando's naar de receiver en geef de antwoorden terug.",
+      "fields": {
+        "command": {
+          "name": "Commando",
+          "description": "Een of meer commando's, bijv. PSDYNEQ ON of MV?."
+        },
+        "wait": {
+          "name": "Wachttijd",
+          "description": "Seconden om antwoorden te verzamelen."
+        }
+      }
+    },
+    "save_quick_select": {
+      "name": "Quick Select opslaan",
+      "description": "Sla de huidige instellingen op in een Quick Select-geheugen.",
+      "fields": {
+        "slot": {
+          "name": "Geheugen",
+          "description": "Geheugen 1-4."
+        }
+      }
+    },
+    "set_tuner_frequency": {
+      "name": "Tunerfrequentie instellen",
+      "description": "Stem de radio af op een frequentie.",
+      "fields": {
+        "frequency": {
+          "name": "Frequentie",
+          "description": "MHz voor FM (bijv. 101.2), kHz voor AM (bijv. 747)."
+        }
+      }
+    },
+    "refresh": {
+      "name": "Verversen",
+      "description": "Lees alle statuswaarden opnieuw uit de receiver."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "sound_mode": {
+        "name": "Surroundmodus"
+      },
+      "sound_mode_info": {
+        "name": "Surroundmodus (display)"
+      },
+      "audio_format": {
+        "name": "Audioformaat"
+      },
+      "audio_channels": {
+        "name": "Ingangskanalen"
+      },
+      "max_volume": {
+        "name": "Maximaal volume"
+      },
+      "tuner_frequency": {
+        "name": "Tunerfrequentie"
+      },
+      "tuner_station": {
+        "name": "Tunerzender"
+      },
+      "audio_input_signal": {
+        "name": "Audio-ingangssignaal"
+      },
+      "audio_sampling_rate": {
+        "name": "Audio-samplefrequentie"
+      },
+      "speaker_size": {
+        "name": "Luidspreker {position}",
+        "state": {
+          "small": "Klein",
+          "large": "Groot",
+          "none": "Geen"
+        }
+      },
+      "surround_back_speakers": {
+        "name": "Surround back-luidsprekers",
+        "state": {
+          "one": "1 luidspreker",
+          "two": "2 luidsprekers"
+        }
+      },
+      "subwoofer_present": {
+        "name": "Subwoofer",
+        "state": {
+          "yes": "Ja",
+          "no": "Nee"
+        }
+      },
+      "crossover": {
+        "name": "Crossover {position}"
+      },
+      "crossover_mode": {
+        "name": "Crossovermodus",
+        "state": {
+          "all": "Alle",
+          "individual": "Individueel"
+        }
+      },
+      "crossover_all": {
+        "name": "Crossover (alle)"
+      },
+      "speaker_distance": {
+        "name": "Afstand {channel}"
+      },
+      "speaker_level": {
+        "name": "Gekalibreerd niveau {channel}"
+      }
+    },
+    "number": {
+      "volume": {
+        "name": "Volume"
+      },
+      "sleep_timer": {
+        "name": "Slaaptimer"
+      },
+      "bass": {
+        "name": "Lage tonen"
+      },
+      "treble": {
+        "name": "Hoge tonen"
+      },
+      "dialog_level": {
+        "name": "Dialoogniveau"
+      },
+      "subwoofer_level": {
+        "name": "Subwooferniveau"
+      },
+      "subwoofer2_level": {
+        "name": "Subwoofer 2 niveau"
+      },
+      "containment_amount": {
+        "name": "LFC containment-niveau"
+      },
+      "lfe_level": {
+        "name": "LFE-niveau"
+      },
+      "audio_delay": {
+        "name": "Audiovertraging"
+      },
+      "tuner_preset": {
+        "name": "Tunerpreset"
+      },
+      "zone2_volume": {
+        "name": "Volume"
+      },
+      "zone2_bass": {
+        "name": "Lage tonen"
+      },
+      "zone2_treble": {
+        "name": "Hoge tonen"
+      },
+      "channel_level": {
+        "name": "Kanaalniveau {channel}"
+      },
+      "zone2_sleep_timer": {
+        "name": "Slaaptimer"
+      },
+      "effect_level": {
+        "name": "Effectniveau"
+      }
+    },
+    "switch": {
+      "power": {
+        "name": "Systeemvoeding"
+      },
+      "setup_menu": {
+        "name": "Instellingenmenu"
+      },
+      "all_zone_stereo": {
+        "name": "All Zone Stereo"
+      },
+      "tone_control": {
+        "name": "Toonregeling"
+      },
+      "dialog_level_adjust": {
+        "name": "Dialoogniveau aanpassen"
+      },
+      "subwoofer_level_adjust": {
+        "name": "Subwooferniveau aanpassen"
+      },
+      "cinema_eq": {
+        "name": "Cinema EQ"
+      },
+      "dynamic_eq": {
+        "name": "Audyssey Dynamic EQ"
+      },
+      "lfc": {
+        "name": "Audyssey LFC"
+      },
+      "graphic_eq": {
+        "name": "Grafische EQ"
+      },
+      "headphone_eq": {
+        "name": "Hoofdtelefoon-EQ"
+      },
+      "center_spread": {
+        "name": "Center spread"
+      },
+      "neural_x": {
+        "name": "DTS Neural:X"
+      },
+      "loudness_management": {
+        "name": "Loudness management"
+      },
+      "subwoofer_direct": {
+        "name": "Subwoofer in Direct/Stereo"
+      },
+      "speaker_virtualizer": {
+        "name": "Speaker virtualizer"
+      },
+      "bluetooth_transmitter": {
+        "name": "Bluetooth-zender"
+      },
+      "vertical_stretch": {
+        "name": "Verticaal uitrekken"
+      },
+      "zone2_hpf": {
+        "name": "Hoogdoorlaatfilter"
+      }
+    },
+    "select": {
+      "eco_mode": {
+        "name": "ECO-modus",
+        "state": {
+          "on": "Aan",
+          "auto": "Automatisch",
+          "off": "Uit"
+        }
+      },
+      "auto_standby": {
+        "name": "Automatische stand-by",
+        "state": {
+          "15m": "15 minuten",
+          "30m": "30 minuten",
+          "60m": "60 minuten",
+          "off": "Uit"
+        }
+      },
+      "dimmer": {
+        "name": "Displaydimmer",
+        "state": {
+          "bright": "Helder",
+          "dim": "Gedimd",
+          "dark": "Donker",
+          "off": "Uit"
+        }
+      },
+      "speaker_preset": {
+        "name": "Luidsprekerpreset",
+        "state": {
+          "preset_1": "Preset 1",
+          "preset_2": "Preset 2"
+        }
+      },
+      "input_mode": {
+        "name": "Ingangsmodus",
+        "state": {
+          "auto": "Automatisch",
+          "hdmi": "HDMI",
+          "digital": "Digitaal",
+          "analog": "Analoog"
+        }
+      },
+      "digital_input": {
+        "name": "Digitale ingang decodering",
+        "state": {
+          "auto": "Automatisch",
+          "pcm": "PCM",
+          "dts": "DTS"
+        }
+      },
+      "multeq": {
+        "name": "Audyssey MultEQ",
+        "state": {
+          "audyssey": "Audyssey",
+          "bypass_lr": "Bypass L/R",
+          "flat": "Vlak",
+          "off": "Uit"
+        }
+      },
+      "reference_level_offset": {
+        "name": "Referentieniveau-offset",
+        "state": {
+          "0db": "0 dB",
+          "5db": "5 dB",
+          "10db": "10 dB",
+          "15db": "15 dB"
+        }
+      },
+      "dynamic_volume": {
+        "name": "Audyssey Dynamic Volume",
+        "state": {
+          "heavy": "Zwaar",
+          "medium": "Gemiddeld",
+          "light": "Licht",
+          "off": "Uit"
+        }
+      },
+      "dynamic_range_compression": {
+        "name": "Dynamisch bereikcompressie",
+        "state": {
+          "auto": "Automatisch",
+          "low": "Laag",
+          "mid": "Midden",
+          "high": "Hoog",
+          "off": "Uit"
+        }
+      },
+      "audio_restorer": {
+        "name": "Audio restorer",
+        "state": {
+          "off": "Uit",
+          "mode1": "Modus 1",
+          "mode2": "Modus 2",
+          "mode3": "Modus 3"
+        }
+      },
+      "dialog_enhancer": {
+        "name": "Dialoogversterker",
+        "state": {
+          "off": "Uit",
+          "low": "Laag",
+          "medium": "Gemiddeld",
+          "high": "Hoog"
+        }
+      },
+      "bluetooth_output": {
+        "name": "Bluetooth-uitvoer",
+        "state": {
+          "bluetooth_speakers": "Bluetooth + luidsprekers",
+          "bluetooth_only": "Alleen Bluetooth"
+        }
+      },
+      "picture_mode": {
+        "name": "Beeldmodus",
+        "state": {
+          "off": "Uit",
+          "standard": "Standaard",
+          "movie": "Film",
+          "vivid": "Levendig",
+          "stream": "Streaming",
+          "custom": "Aangepast",
+          "isf_day": "ISF dag",
+          "isf_night": "ISF nacht"
+        }
+      },
+      "aspect_ratio": {
+        "name": "Beeldverhouding",
+        "state": {
+          "normal": "Normaal",
+          "full": "Volledig"
+        }
+      },
+      "video_resolution": {
+        "name": "Videoresolutie",
+        "state": {
+          "480p": "480p/576p",
+          "1080i": "1080i",
+          "720p": "720p",
+          "1080p": "1080p",
+          "1080p24": "1080p 24 Hz",
+          "4k": "4K",
+          "4k60": "4K 60/50 Hz",
+          "8k": "8K",
+          "auto": "Automatisch"
+        }
+      },
+      "hdmi_resolution": {
+        "name": "HDMI-uitgangsresolutie",
+        "state": {
+          "480p": "480p/576p",
+          "1080i": "1080i",
+          "720p": "720p",
+          "1080p": "1080p",
+          "1080p24": "1080p 24 Hz",
+          "4k": "4K",
+          "4k60": "4K 60/50 Hz",
+          "8k": "8K",
+          "auto": "Automatisch"
+        }
+      },
+      "hdmi_audio_output": {
+        "name": "HDMI-audio-uitgang",
+        "state": {
+          "amp": "AVR",
+          "tv": "TV"
+        }
+      },
+      "video_processing_mode": {
+        "name": "Videoverwerkingsmodus",
+        "state": {
+          "auto": "Automatisch",
+          "game": "Game",
+          "movie": "Film",
+          "bypass": "Bypass"
+        }
+      },
+      "tuner_band": {
+        "name": "Tunerband",
+        "state": {
+          "am": "AM",
+          "fm": "FM"
+        }
+      },
+      "tuner_mode": {
+        "name": "Tuner afstemmodus",
+        "state": {
+          "auto": "Automatisch",
+          "manual": "Handmatig"
+        }
+      },
+      "zone2_channel_setting": {
+        "name": "Kanaalinstelling",
+        "state": {
+          "stereo": "Stereo",
+          "mono": "Mono"
+        }
+      },
+      "zone2_auto_standby": {
+        "name": "Automatische stand-by",
+        "state": {
+          "2h": "2 uur",
+          "4h": "4 uur",
+          "8h": "8 uur",
+          "off": "Uit"
+        }
+      },
+      "monitor_output": {
+        "name": "Monitoruitgang",
+        "state": {
+          "auto": "Automatisch",
+          "monitor_1": "Monitor 1",
+          "monitor_2": "Monitor 2"
+        }
+      },
+      "video_select": {
+        "name": "Videoselectie",
+        "state": {
+          "off": "Uit",
+          "sat_cbl": "CBL/SAT",
+          "dvd": "DVD",
+          "bd": "Blu-ray",
+          "game": "Game",
+          "8k": "8K",
+          "aux1": "AUX1",
+          "mplay": "Media Player",
+          "tv": "TV",
+          "cd": "CD",
+          "phono": "Phono",
+          "tuner": "Tuner",
+          "net": "HEOS Music",
+          "bt": "Bluetooth"
+        }
+      }
+    },
+    "button": {
+      "cursor_up": {
+        "name": "Cursor omhoog"
+      },
+      "cursor_down": {
+        "name": "Cursor omlaag"
+      },
+      "cursor_left": {
+        "name": "Cursor links"
+      },
+      "cursor_right": {
+        "name": "Cursor rechts"
+      },
+      "cursor_enter": {
+        "name": "Enter"
+      },
+      "menu_back": {
+        "name": "Terug"
+      },
+      "menu_option": {
+        "name": "Optie"
+      },
+      "menu_info": {
+        "name": "Info"
+      },
+      "quick_select": {
+        "name": "Quick Select {slot}"
+      },
+      "tuner_preset_up": {
+        "name": "Tuner volgende preset"
+      },
+      "tuner_preset_down": {
+        "name": "Tuner vorige preset"
+      },
+      "tuner_frequency_up": {
+        "name": "Tunerfrequentie omhoog"
+      },
+      "tuner_frequency_down": {
+        "name": "Tunerfrequentie omlaag"
+      },
+      "channel_levels_reset": {
+        "name": "Kanaalniveaus resetten"
+      },
+      "sound_mode_next": {
+        "name": "Volgende surroundmodus"
+      },
+      "sound_mode_previous": {
+        "name": "Vorige surroundmodus"
+      },
+      "refresh": {
+        "name": "Status verversen"
+      },
+      "panel_lock": {
+        "name": "Frontpaneel vergrendelen"
+      },
+      "panel_volume_lock": {
+        "name": "Frontpaneel en volume vergrendelen"
+      },
+      "panel_unlock": {
+        "name": "Frontpaneel ontgrendelen"
+      },
+      "remote_lock": {
+        "name": "Afstandsbediening vergrendelen"
+      },
+      "remote_unlock": {
+        "name": "Afstandsbediening ontgrendelen"
+      }
+    }
+  }
+}

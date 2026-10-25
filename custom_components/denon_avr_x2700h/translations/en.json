@@ -1,0 +1,580 @@
+{
+  "exceptions": {
+    "not_accepted": {
+      "message": "The receiver did not accept {value} for {entity}. This setting is probably not available for the current input signal or surround mode (for example dynamic range compression and LFE level with a stereo PCM signal)."
+    }
+  },
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Denon AVR-X2700H",
+        "description": "Enter the IP address of the receiver. Network control must be set to Always On, and no other Telnet client may be connected.",
+        "data": {
+          "host": "Host",
+          "name": "Name"
+        }
+      },
+      "confirm": {
+        "title": "Denon AVR-X2700H",
+        "description": "Add {name} ({host})?"
+      },
+      "reconfigure": {
+        "title": "Change host",
+        "data": {
+          "host": "Host"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect on Telnet port 23. Check the IP address, enable network control and make sure no other Telnet client is connected."
+    },
+    "abort": {
+      "already_configured": "This receiver is already configured.",
+      "reconfigure_successful": "The receiver has been reconfigured.",
+      "cannot_connect": "Cannot connect to the receiver."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options",
+        "data": {
+          "zone2": "Enable Zone 2",
+          "max_volume": "Volume at 100% (dB)",
+          "volume_step": "Volume step (dB)"
+        },
+        "data_description": {
+          "max_volume": "Upper limit for the media player volume slider; 0 dB is a safe default."
+        }
+      }
+    }
+  },
+  "services": {
+    "send_command": {
+      "name": "Send command",
+      "description": "Send raw Telnet commands to the receiver and return the lines it answered.",
+      "fields": {
+        "command": {
+          "name": "Command",
+          "description": "One or more commands, e.g. PSDYNEQ ON or MV?."
+        },
+        "wait": {
+          "name": "Wait",
+          "description": "Seconds to collect answers."
+        }
+      }
+    },
+    "save_quick_select": {
+      "name": "Save Quick Select",
+      "description": "Store the current settings in a Quick Select slot.",
+      "fields": {
+        "slot": {
+          "name": "Slot",
+          "description": "Slot 1-4."
+        }
+      }
+    },
+    "set_tuner_frequency": {
+      "name": "Set tuner frequency",
+      "description": "Tune the radio to a frequency.",
+      "fields": {
+        "frequency": {
+          "name": "Frequency",
+          "description": "MHz for FM (e.g. 101.2), kHz for AM (e.g. 747)."
+        }
+      }
+    },
+    "refresh": {
+      "name": "Refresh",
+      "description": "Read every status value from the receiver again."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "sound_mode": {
+        "name": "Surround mode"
+      },
+      "sound_mode_info": {
+        "name": "Surround mode (display)"
+      },
+      "audio_format": {
+        "name": "Audio format"
+      },
+      "audio_channels": {
+        "name": "Input channels"
+      },
+      "max_volume": {
+        "name": "Maximum volume"
+      },
+      "tuner_frequency": {
+        "name": "Tuner frequency"
+      },
+      "tuner_station": {
+        "name": "Tuner station"
+      },
+      "audio_input_signal": {
+        "name": "Audio input signal"
+      },
+      "audio_sampling_rate": {
+        "name": "Audio sampling rate"
+      },
+      "speaker_size": {
+        "name": "Speaker {position}",
+        "state": {
+          "small": "Small",
+          "large": "Large",
+          "none": "None"
+        }
+      },
+      "surround_back_speakers": {
+        "name": "Surround back speakers",
+        "state": {
+          "one": "1 speaker",
+          "two": "2 speakers"
+        }
+      },
+      "subwoofer_present": {
+        "name": "Subwoofer",
+        "state": {
+          "yes": "Yes",
+          "no": "No"
+        }
+      },
+      "crossover": {
+        "name": "Crossover {position}"
+      },
+      "crossover_mode": {
+        "name": "Crossover mode",
+        "state": {
+          "all": "All",
+          "individual": "Individual"
+        }
+      },
+      "crossover_all": {
+        "name": "Crossover (all)"
+      },
+      "speaker_distance": {
+        "name": "Distance {channel}"
+      },
+      "speaker_level": {
+        "name": "Calibrated level {channel}"
+      }
+    },
+    "number": {
+      "volume": {
+        "name": "Volume"
+      },
+      "sleep_timer": {
+        "name": "Sleep timer"
+      },
+      "bass": {
+        "name": "Bass"
+      },
+      "treble": {
+        "name": "Treble"
+      },
+      "dialog_level": {
+        "name": "Dialog level"
+      },
+      "subwoofer_level": {
+        "name": "Subwoofer level"
+      },
+      "subwoofer2_level": {
+        "name": "Subwoofer 2 level"
+      },
+      "containment_amount": {
+        "name": "LFC containment amount"
+      },
+      "lfe_level": {
+        "name": "LFE level"
+      },
+      "audio_delay": {
+        "name": "Audio delay"
+      },
+      "tuner_preset": {
+        "name": "Tuner preset"
+      },
+      "zone2_volume": {
+        "name": "Volume"
+      },
+      "zone2_bass": {
+        "name": "Bass"
+      },
+      "zone2_treble": {
+        "name": "Treble"
+      },
+      "channel_level": {
+        "name": "Channel level {channel}"
+      },
+      "zone2_sleep_timer": {
+        "name": "Sleep timer"
+      },
+      "effect_level": {
+        "name": "Effect level"
+      }
+    },
+    "switch": {
+      "power": {
+        "name": "System power"
+      },
+      "setup_menu": {
+        "name": "Setup menu"
+      },
+      "all_zone_stereo": {
+        "name": "All zone stereo"
+      },
+      "tone_control": {
+        "name": "Tone control"
+      },
+      "dialog_level_adjust": {
+        "name": "Dialog level adjust"
+      },
+      "subwoofer_level_adjust": {
+        "name": "Subwoofer level adjust"
+      },
+      "cinema_eq": {
+        "name": "Cinema EQ"
+      },
+      "dynamic_eq": {
+        "name": "Audyssey Dynamic EQ"
+      },
+      "lfc": {
+        "name": "Audyssey LFC"
+      },
+      "graphic_eq": {
+        "name": "Graphic EQ"
+      },
+      "headphone_eq": {
+        "name": "Headphone EQ"
+      },
+      "center_spread": {
+        "name": "Center spread"
+      },
+      "neural_x": {
+        "name": "DTS Neural:X"
+      },
+      "loudness_management": {
+        "name": "Loudness management"
+      },
+      "subwoofer_direct": {
+        "name": "Subwoofer in Direct/Stereo"
+      },
+      "speaker_virtualizer": {
+        "name": "Speaker virtualizer"
+      },
+      "bluetooth_transmitter": {
+        "name": "Bluetooth transmitter"
+      },
+      "vertical_stretch": {
+        "name": "Vertical stretch"
+      },
+      "zone2_hpf": {
+        "name": "High-pass filter"
+      }
+    },
+    "select": {
+      "eco_mode": {
+        "name": "ECO mode",
+        "state": {
+          "on": "On",
+          "auto": "Auto",
+          "off": "Off"
+        }
+      },
+      "auto_standby": {
+        "name": "Auto standby",
+        "state": {
+          "15m": "15 minutes",
+          "30m": "30 minutes",
+          "60m": "60 minutes",
+          "off": "Off"
+        }
+      },
+      "dimmer": {
+        "name": "Display dimmer",
+        "state": {
+          "bright": "Bright",
+          "dim": "Dim",
+          "dark": "Dark",
+          "off": "Off"
+        }
+      },
+      "speaker_preset": {
+        "name": "Speaker preset",
+        "state": {
+          "preset_1": "Preset 1",
+          "preset_2": "Preset 2"
+        }
+      },
+      "input_mode": {
+        "name": "Input mode",
+        "state": {
+          "auto": "Auto",
+          "hdmi": "HDMI",
+          "digital": "Digital",
+          "analog": "Analog"
+        }
+      },
+      "digital_input": {
+        "name": "Digital input decode",
+        "state": {
+          "auto": "Auto",
+          "pcm": "PCM",
+          "dts": "DTS"
+        }
+      },
+      "multeq": {
+        "name": "Audyssey MultEQ",
+        "state": {
+          "audyssey": "Audyssey",
+          "bypass_lr": "Bypass L/R",
+          "flat": "Flat",
+          "off": "Off"
+        }
+      },
+      "reference_level_offset": {
+        "name": "Reference level offset",
+        "state": {
+          "0db": "0 dB",
+          "5db": "5 dB",
+          "10db": "10 dB",
+          "15db": "15 dB"
+        }
+      },
+      "dynamic_volume": {
+        "name": "Audyssey Dynamic Volume",
+        "state": {
+          "heavy": "Heavy",
+          "medium": "Medium",
+          "light": "Light",
+          "off": "Off"
+        }
+      },
+      "dynamic_range_compression": {
+        "name": "Dynamic range compression",
+        "state": {
+          "auto": "Auto",
+          "low": "Low",
+          "mid": "Mid",
+          "high": "High",
+          "off": "Off"
+        }
+      },
+      "audio_restorer": {
+        "name": "Compressed audio restorer",
+        "state": {
+          "off": "Off",
+          "mode1": "Mode 1",
+          "mode2": "Mode 2",
+          "mode3": "Mode 3"
+        }
+      },
+      "dialog_enhancer": {
+        "name": "Dialog enhancer",
+        "state": {
+          "off": "Off",
+          "low": "Low",
+          "medium": "Medium",
+          "high": "High"
+        }
+      },
+      "bluetooth_output": {
+        "name": "Bluetooth output",
+        "state": {
+          "bluetooth_speakers": "Bluetooth + speakers",
+          "bluetooth_only": "Bluetooth only"
+        }
+      },
+      "picture_mode": {
+        "name": "Picture mode",
+        "state": {
+          "off": "Off",
+          "standard": "Standard",
+          "movie": "Movie",
+          "vivid": "Vivid",
+          "stream": "Streaming",
+          "custom": "Custom",
+          "isf_day": "ISF Day",
+          "isf_night": "ISF Night"
+        }
+      },
+      "aspect_ratio": {
+        "name": "Aspect ratio",
+        "state": {
+          "normal": "Normal",
+          "full": "Full"
+        }
+      },
+      "video_resolution": {
+        "name": "Video resolution",
+        "state": {
+          "480p": "480p/576p",
+          "1080i": "1080i",
+          "720p": "720p",
+          "1080p": "1080p",
+          "1080p24": "1080p 24 Hz",
+          "4k": "4K",
+          "4k60": "4K 60/50 Hz",
+          "8k": "8K",
+          "auto": "Auto"
+        }
+      },
+      "hdmi_resolution": {
+        "name": "HDMI output resolution",
+        "state": {
+          "480p": "480p/576p",
+          "1080i": "1080i",
+          "720p": "720p",
+          "1080p": "1080p",
+          "1080p24": "1080p 24 Hz",
+          "4k": "4K",
+          "4k60": "4K 60/50 Hz",
+          "8k": "8K",
+          "auto": "Auto"
+        }
+      },
+      "hdmi_audio_output": {
+        "name": "HDMI audio output",
+        "state": {
+          "amp": "AVR",
+          "tv": "TV"
+        }
+      },
+      "video_processing_mode": {
+        "name": "Video processing mode",
+        "state": {
+          "auto": "Auto",
+          "game": "Game",
+          "movie": "Movie",
+          "bypass": "Bypass"
+        }
+      },
+      "tuner_band": {
+        "name": "Tuner band",
+        "state": {
+          "am": "AM",
+          "fm": "FM"
+        }
+      },
+      "tuner_mode": {
+        "name": "Tuner tuning mode",
+        "state": {
+          "auto": "Auto",
+          "manual": "Manual"
+        }
+      },
+      "zone2_channel_setting": {
+        "name": "Channel setting",
+        "state": {
+          "stereo": "Stereo",
+          "mono": "Mono"
+        }
+      },
+      "zone2_auto_standby": {
+        "name": "Auto standby",
+        "state": {
+          "2h": "2 hours",
+          "4h": "4 hours",
+          "8h": "8 hours",
+          "off": "Off"
+        }
+      },
+      "monitor_output": {
+        "name": "Monitor output",
+        "state": {
+          "auto": "Auto",
+          "monitor_1": "Monitor 1",
+          "monitor_2": "Monitor 2"
+        }
+      },
+      "video_select": {
+        "name": "Video select",
+        "state": {
+          "off": "Off",
+          "sat_cbl": "CBL/SAT",
+          "dvd": "DVD",
+          "bd": "Blu-ray",
+          "game": "Game",
+          "8k": "8K",
+          "aux1": "AUX1",
+          "mplay": "Media Player",
+          "tv": "TV",
+          "cd": "CD",
+          "phono": "Phono",
+          "tuner": "Tuner",
+          "net": "HEOS Music",
+          "bt": "Bluetooth"
+        }
+      }
+    },
+    "button": {
+      "cursor_up": {
+        "name": "Cursor up"
+      },
+      "cursor_down": {
+        "name": "Cursor down"
+      },
+      "cursor_left": {
+        "name": "Cursor left"
+      },
+      "cursor_right": {
+        "name": "Cursor right"
+      },
+      "cursor_enter": {
+        "name": "Enter"
+      },
+      "menu_back": {
+        "name": "Back"
+      },
+      "menu_option": {
+        "name": "Option"
+      },
+      "menu_info": {
+        "name": "Info"
+      },
+      "quick_select": {
+        "name": "Quick Select {slot}"
+      },
+      "tuner_preset_up": {
+        "name": "Tuner next preset"
+      },
+      "tuner_preset_down": {
+        "name": "Tuner previous preset"
+      },
+      "tuner_frequency_up": {
+        "name": "Tuner frequency up"
+      },
+      "tuner_frequency_down": {
+        "name": "Tuner frequency down"
+      },
+      "channel_levels_reset": {
+        "name": "Reset channel levels"
+      },
+      "sound_mode_next": {
+        "name": "Next surround mode"
+      },
+      "sound_mode_previous": {
+        "name": "Previous surround mode"
+      },
+      "refresh": {
+        "name": "Refresh status"
+      },
+      "panel_lock": {
+        "name": "Lock front panel"
+      },
+      "panel_volume_lock": {
+        "name": "Lock front panel and volume"
+      },
+      "panel_unlock": {
+        "name": "Unlock front panel"
+      },
+      "remote_lock": {
+        "name": "Lock remote control"
+      },
+      "remote_unlock": {
+        "name": "Unlock remote control"
+      }
+    }
+  }
+}

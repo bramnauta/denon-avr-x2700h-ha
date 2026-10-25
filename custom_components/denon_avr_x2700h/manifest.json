@@ -1,0 +1,20 @@
+{
+  "domain": "denon_avr_x2700h",
+  "name": "Denon AVR-X2700H",
+  "codeowners": ["@bramnauta"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/bramnauta/denon-avr-x2700h-ha",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/bramnauta/denon-avr-x2700h-ha/issues",
+  "loggers": ["custom_components.denon_avr_x2700h"],
+  "requirements": [],
+  "ssdp": [
+    {
+      "manufacturer": "Denon",
+      "modelName": "*AVR-X2700H*"
+    }
+  ],
+  "version": "0.1.0"
+}

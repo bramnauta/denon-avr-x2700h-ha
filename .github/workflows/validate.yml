@@ -1,0 +1,46 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  hassfest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: home-assistant/actions/hassfest@master
+
+  hacs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hacs/action@main
+        with:
+          category: integration
+          # Not (yet) registered in home-assistant/brands.
+          ignore: brands
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install pytest aiohttp
+      - run: python scripts/gen_translations.py
+      - run: git diff --exit-code custom_components/denon_avr_x2700h/translations custom_components/denon_avr_x2700h/strings.json
+      # Protocol/client tests run without Home Assistant (its test plugin
+      # blocks sockets and replaces the event loop).
+      - run: pytest -q --ignore tests/test_init.py
+
+  tests-homeassistant:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install pytest-homeassistant-custom-component
+      - run: pytest -q tests/test_init.py -o asyncio_mode=auto
