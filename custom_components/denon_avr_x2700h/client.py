@@ -427,7 +427,10 @@ class DenonClient:
         if not answered and setting.query:
             answered = await self._send_and_wait(setting.key, setting.query, timeout)
         if self.get_reported(setting.key) == expected:
-            self.stored.pop(setting.key, None)
+            if self.stored.pop(setting.key, None) is not None:
+                # E.g. DRC "mid" (stored) -> "off": the receiver keeps reporting
+                # OFF, so nothing else tells the entities the value changed.
+                self._notify({setting.key})
             return True
         if setting.reports_effective and answered:
             # Stored by the receiver but not in effect for this input signal.

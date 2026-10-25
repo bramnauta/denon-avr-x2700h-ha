@@ -196,7 +196,20 @@ def test_set_confirmed(monkeypatch) -> None:
         await fake.push("PSDRC OFF")
         await asyncio.sleep(0.1)
         assert client.get(drc.key) == "low"
-        # ... until the receiver reports it (e.g. a Dolby signal arrives).
+        # Choosing "off" while "low" is stored: the receiver answers OFF, which
+        # it was already reporting. The stored value must go and listeners
+        # must hear about it.
+        events: list[set[str] | None] = []
+        remove = client.add_listener(events.append)
+        assert await client.async_set_confirmed(drc, "off", 1)
+        remove()
+        assert drc.key not in client.stored
+        assert client.get(drc.key) == "off"
+        assert {drc.key} in events
+
+        # A stored value is also dropped once the receiver reports it itself
+        # (e.g. a Dolby signal arrives).
+        assert await client.async_set_confirmed(drc, "low", 1)
         await fake.push("PSDRC LOW")
         await asyncio.sleep(0.1)
         assert drc.key not in client.stored

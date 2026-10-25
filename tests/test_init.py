@@ -106,6 +106,14 @@ async def test_setup_and_control(
     assert state.attributes["active"] is False
     assert state.attributes["effective_value"] == "off"
 
+    # Back to "off": the entity must follow, not jump back to "low".
+    await hass.services.async_call(
+        "select", "select_option", {"entity_id": drc, "option": "off"}, blocking=True
+    )
+    state = hass.states.get(drc)
+    assert state.state == "off"
+    assert state.attributes["active"] is True
+
     # A change the receiver really refuses gives an error, not silence.
     dimmer = "select.denon_avr_x2700h_display_dimmer"
     with pytest.raises(HomeAssistantError) as err:
