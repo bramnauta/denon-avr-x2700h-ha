@@ -439,6 +439,22 @@ class DenonClient:
             return True
         return False
 
+    def restore_stored(self, setting: Setting, value: Any, effective: Any) -> bool:
+        """Re-apply a stored-but-inactive value remembered from before a restart.
+
+        Only done while the receiver still reports the same effective value as
+        back then; anything else means the setting changed in the meantime.
+        """
+        if not setting.reports_effective or self.get_reported(setting.key) != effective:
+            return False
+        command = setting.encode(value)
+        raw = command[len(setting.prefix) + len(setting.sep) :].strip()
+        if setting.decode(raw) == effective:
+            return False
+        self.stored[setting.key] = raw
+        self._notify({setting.key})
+        return True
+
     async def _send_and_wait(self, key: str, command: str, timeout: float) -> bool:
         """Send ``command``; return True once the receiver reports ``key``."""
         waiter: asyncio.Future[str] = asyncio.get_running_loop().create_future()

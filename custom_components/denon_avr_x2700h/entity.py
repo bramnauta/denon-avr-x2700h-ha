@@ -11,10 +11,11 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, DeviceInfo
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.restore_state import RestoreEntity
 
 from . import DenonConfigEntry
 from .const import CONF_ZONE2, DEFAULT_ZONE2, DOMAIN, MANUFACTURER
-from .protocol import CONFIG, DIAGNOSTIC, SETTINGS, ZONE_2, Setting
+from .protocol import CONFIG, DIAGNOSTIC, KIND_NUMBER, SETTINGS, ZONE_2, Setting
 
 
 def entry_unique_id(entry: DenonConfigEntry) -> str:
@@ -85,7 +86,7 @@ class DenonEntity(Entity):
             raise HomeAssistantError(str(err)) from err
 
 
-class DenonSettingEntity(DenonEntity):
+class DenonSettingEntity(DenonEntity, RestoreEntity):
     """Entity bound to one protocol setting."""
 
     def __init__(self, entry: DenonConfigEntry, setting: Setting) -> None:
@@ -104,6 +105,28 @@ class DenonSettingEntity(DenonEntity):
             self._attr_entity_category = EntityCategory.CONFIG
         elif setting.category == DIAGNOSTIC:
             self._attr_entity_category = EntityCategory.DIAGNOSTIC
+
+    async def async_added_to_hass(self) -> None:
+        """Subscribe, and bring back a stored-but-inactive value (DRC, LFE).
+
+        Telnet only reports the value in effect, so after a restart the value
+        chosen earlier (e.g. DRC "mid" while the input is PCM) would be lost.
+        """
+        await super().async_added_to_hass()
+        if not self._setting.reports_effective:
+            return
+        last = await self.async_get_last_state()
+        if last is None or last.attributes.get("active") is not False:
+            return
+        value: Any = last.state
+        try:
+            if self._setting.kind == KIND_NUMBER:
+                value = float(value)
+            self._client.restore_stored(
+                self._setting, value, last.attributes.get("effective_value")
+            )
+        except ValueError:
+            return
 
     @property
     def available(self) -> bool:

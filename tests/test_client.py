@@ -215,6 +215,18 @@ def test_set_confirmed(monkeypatch) -> None:
         assert drc.key not in client.stored
         assert client.get(drc.key) == "low"
 
+        # Restoring a remembered value after a restart: only while the
+        # receiver still reports the same effective value as back then.
+        client.stored.clear()
+        assert client.get_reported(drc.key) == "low"  # pushed above
+        assert not client.restore_stored(drc, "mid", "off")  # effective changed
+        await fake.push("PSDRC OFF")
+        await asyncio.sleep(0.1)
+        assert client.restore_stored(drc, "mid", "off")
+        assert client.get(drc.key) == "mid"
+        assert not client.restore_stored(settings["dimmer"], "dark", "dim")
+        client.stored.clear()
+
         # LFE silently ignored, then answered with the effective value on the
         # follow-up query -> stored as well.
         assert await client.async_set_confirmed(settings["lfe_level"], -5, 0.3)

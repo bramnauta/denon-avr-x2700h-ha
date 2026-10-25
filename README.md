@@ -48,8 +48,10 @@ werkt*, niet de opgeslagen instelling. Bij een PCM-signaal (bijv. een streamer d
 Dolby decodeert) meldt hij voor DRC altijd *Uit*, ook al staat er in het menu *Mid*. Kies je
 een stand in Home Assistant, dan toont de entiteit die stand met het attribuut
 `active: false` en `effective_value` (wat nu werkt). Zodra er een Dolby/DTS-signaal binnenkomt
-en de receiver de stand zelf meldt, wordt `active` weer `true`. Na een herstart van
-Home Assistant is de gekozen stand niet bekend en toont de entiteit weer de werkende waarde.
+en de receiver de stand zelf meldt, wordt `active` weer `true`. De gekozen stand blijft na
+een herstart van Home Assistant bewaard, zolang de receiver nog dezelfde werkende waarde
+meldt als ervoor. Pas je DRC of LFE op de receiver zelf aan terwijl die niet actief is
+(bijv. bij PCM), dan kan Home Assistant dat niet zien.
 
 Entiteiten worden pas aangemaakt zodra de receiver een waarde voor die instelling
 meldt. Instellingen die bij jouw luidsprekeropstelling of firmware niet bestaan (bijv.

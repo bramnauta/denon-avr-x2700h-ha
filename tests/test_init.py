@@ -11,13 +11,16 @@ import pytest
 
 pytest.importorskip("pytest_homeassistant_custom_component")
 
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant_custom_component.common import (
+    MockConfigEntry,
+    mock_restore_cache,
+)
 
 from custom_components.denon_avr_x2700h import client as ha_client
 from custom_components.denon_avr_x2700h.const import DOMAIN
 from custom_components.denon_avr_x2700h.webapi import DeviceInfo
 from homeassistant.const import CONF_HOST
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, State
 from homeassistant.exceptions import HomeAssistantError
 
 from .test_client import STATE, FakeReceiver
@@ -28,11 +31,8 @@ def _custom(enable_custom_integrations):
     yield
 
 
-async def test_setup_and_control(
-    socket_enabled, hass: HomeAssistant, monkeypatch
-) -> None:
+async def _setup(hass: HomeAssistant, monkeypatch) -> tuple[MockConfigEntry, FakeReceiver]:
     monkeypatch.setattr(ha_client, "COMMAND_INTERVAL", 0.001)
-    STATE["Z2?"] = ["Z2ON", "Z2TUNER", "Z240"]
     fake = FakeReceiver()
     port = await fake.start()
 
@@ -57,6 +57,48 @@ async def test_setup_and_control(
     ):
         assert await hass.config_entries.async_setup(entry.entry_id)
         await hass.async_block_till_done()
+    return entry, fake
+
+
+async def test_restore_inactive_value(
+    socket_enabled, hass: HomeAssistant, monkeypatch
+) -> None:
+    """After a restart the DRC chosen earlier (inactive on PCM) comes back."""
+    mock_restore_cache(
+        hass,
+        [
+            State(
+                "select.denon_avr_x2700h_dynamic_range_compression",
+                "mid",
+                {"active": False, "effective_value": "off"},
+            ),
+            # The receiver now reports 0 dB, not -2: not restored.
+            State(
+                "number.denon_avr_x2700h_lfe_level",
+                "-5.0",
+                {"active": False, "effective_value": -2},
+            ),
+        ],
+    )
+    STATE["PSLFE ?"] = ["PSLFE 00"]
+    entry, fake = await _setup(hass, monkeypatch)
+
+    drc = hass.states.get("select.denon_avr_x2700h_dynamic_range_compression")
+    assert drc.state == "mid"
+    assert drc.attributes["active"] is False
+    lfe = hass.states.get("number.denon_avr_x2700h_lfe_level")
+    assert lfe.state == "0"
+    assert lfe.attributes["active"] is True
+
+    assert await hass.config_entries.async_unload(entry.entry_id)
+    await fake.stop()
+
+
+async def test_setup_and_control(
+    socket_enabled, hass: HomeAssistant, monkeypatch
+) -> None:
+    STATE["Z2?"] = ["Z2ON", "Z2TUNER", "Z240"]
+    entry, fake = await _setup(hass, monkeypatch)
 
     state = hass.states.get("media_player.denon_avr_x2700h")
     assert state is not None, sorted(hass.states.async_entity_ids())
